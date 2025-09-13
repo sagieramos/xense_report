@@ -6,7 +6,8 @@
     <title>Complete Circuit Analysis & Improvements</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              font-family: 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.6; 
             margin: 0;
             padding: 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -143,6 +144,62 @@
                 font-size: 0.8em;
             }
         }
+
+                .circuit-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .rfm-card .circuit-title { color: #e74c3c; }
+        .rtc-card .circuit-title { color: #3498db; }
+        
+        .circuit-title::before {
+            margin-right: 15px;
+            font-size: 1.3em;
+        }
+        .rfm-card .circuit-title::before { content: "📡"; }
+        .rtc-card .circuit-title::before { content: "⏰"; }
+
+
+                .pin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9em;
+        }
+        .pin-table th, .pin-table td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .pin-table th {
+            background: #4a5568;
+            color: white;
+        }
+        .pin-table tr:hover {
+            background: #f7fafc;
+        }
+
+                .issue-section {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .critical { background: #ffebee; border: 2px solid #e74c3c; }
+        .major { background: #fff8e1; border: 2px solid #f39c12; }
+        .minor { background: #e8f5e8; border: 2px solid #27ae60; }
+        
+        .issue-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .critical .issue-title { color: #e74c3c; }
+        .major .issue-title { color: #f39c12; }
+        .minor .issue-title { color: #27ae60; }
+        
     </style>
 </head>
 <body>
@@ -151,6 +208,92 @@
             <h1>🔧 Complete XENSE Smart Socket Circuit Analysis</h1>
             <p>Comprehensive Review & Improvement Recommendations</p>
         </div>
+
+
+                        <div class="circuit-card rfm-card">
+                    <div class="circuit-title">RFM69HW RF Transceiver</div>
+                    
+                    <div class="component-analysis">
+                        <h4>📋 Current Implementation Analysis</h4>
+                        <table class="pin-table">
+                            <thead>
+                                <tr>
+                                    <th>RFM69HW Pin</th>
+                                    <th>ESP32 Connection</th>
+                                    <th>Function</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>NSS (15)</td>
+                                    <td>IO2</td>
+                                    <td>SPI Chip Select</td>
+                                    <td>✅ Correct</td>
+                                </tr>
+                                <tr>
+                                    <td>MOSI (14)</td>
+                                    <td>MOSI</td>
+                                    <td>SPI Data In</td>
+                                    <td>✅ Correct</td>
+                                </tr>
+                                <tr>
+                                    <td>MISO (13)</td>
+                                    <td>MISO</td>
+                                    <td>SPI Data Out</td>
+                                    <td>✅ Correct</td>
+                                </tr>
+                                <tr>
+                                    <td>SCK (12)</td>
+                                    <td>CLK</td>
+                                    <td>SPI Clock</td>
+                                    <td>✅ Correct</td>
+                                </tr>
+                                <tr>
+                                    <td>RESET (1)</td>
+                                    <td>RST</td>
+                                    <td>Reset Control</td>
+                                    <td>❓ Not connected to ESP32</td>
+                                </tr>
+                                <tr>
+                                    <td>DIO0 (2)</td>
+                                    <td>DO0</td>
+                                    <td>Interrupt/Status</td>
+                                    <td>❓ Not connected to ESP32</td>
+                                </tr>
+                                <tr>
+                                    <td>ANT</td>
+                                    <td>IPEX connector</td>
+                                    <td>Antenna</td>
+                                    <td>No matching network</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="issue-section critical">
+                        <div class="issue-title">Critical Issues</div>
+                        <ul>
+                            <li><strong>Missing Reset Connection:</strong> RST pin not connected to ESP32 GPIO</li>
+                            <li><strong>Missing Interrupt:</strong> DIO0 pin not connected for status monitoring</li>
+                            <li><strong>No Antenna Matching:</strong> Direct connection without impedance matching</li>
+                            <li><strong>Power Supply Decoupling:</strong> Insufficient decoupling capacitors</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="issue-section major">
+                        <div class="issue-title">Major Issues</div>
+                        <ul>
+                            <li><strong>Antenna Design:</strong> No ground plane or antenna tuning shown</li>
+                            <li><strong>Crystal Loading:</strong> No load capacitors for 32MHz crystal</li>
+                            <li><strong>RF Filtering:</strong> Missing RF filtering on power lines</li>
+                            <li><strong>ESD Protection:</strong> No ESD protection on antenna line</li>
+                        </ul>
+                    </div>
+                </div>
+                
+
+
         
         <div class="content">
             <div class="priority-summary">
@@ -199,7 +342,7 @@
                     <div class="problem">
                         <strong>Problems:</strong>
                         <ul>
-                            <li>HLK10M03: Current capacity not verified</li>
+                            <!-- <li>HLK10M03: Current capacity not verified</li> -->
                             <li>No input filtering on AC side</li>
                             <li>Insufficient output decoupling</li>
                             <li>No inrush current limiting</li>
@@ -345,16 +488,6 @@
                         <li><strong>Refine Grounding:</strong> Implement proper grounding architecture</li>
                     </ol>
                 </div>
-
-                <div style="background: #d1ecf1; border: 1px solid #bee5eb; padding: 20px; border-radius: 10px; margin: 20px 0;">
-                    <h3>Phase 3: Design Optimization</h3>
-                    <ol>
-                        <li><strong>Component Selection:</strong> Specify all ratings and tolerances</li>
-                        <li><strong>PCB Layout:</strong> Optimize for EMI and thermal performance</li>
-                        <li><strong>Testing Protocol:</strong> Develop comprehensive test procedures</li>
-                        <li><strong>Certification:</strong> Ensure compliance with safety standards</li>
-                    </ol>
-                </div>
             </div>
 
             <div class="circuit-section">
@@ -440,7 +573,7 @@
                 <ul>
                     <li>Immediate destruction of the ADE7953 chip</li>
                     <li>Potential fire hazard from improper AC handling</li>
-                    <li>Safety standard violations (IEC 61010-1)</li>
+                    <li>Safety standard violations (<a href="https://www.iecee.org/certification/iec-standards/iec-61010-1-2010">IEC 61010-1</a>)</li>
                     <li>Regulatory compliance failures</li>
                 </ul>
                 <p><strong>All critical issues must be addressed before any testing or implementation.</strong></p>
