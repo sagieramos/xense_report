@@ -1,58 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Complete Circuit Analysis & Improvements</title>
     <style>
         body {
-              font-family: 'Helvetica Neue', Arial, sans-serif;
-  line-height: 1.6; 
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
             margin: 0;
             padding: 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
         }
+
         .container {
             max-width: 1400px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
+
         .header {
             background: linear-gradient(135deg, #2c3e50, #e74c3c);
             color: white;
             padding: 30px;
             text-align: center;
         }
+
         .header h1 {
             margin: 0;
             font-size: 2.5em;
             font-weight: 300;
         }
+
         .content {
             padding: 30px;
         }
+
         .issue-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 25px;
             margin: 30px 0;
         }
+
         .issue-card {
             padding: 25px;
             border-radius: 15px;
             border-left: 5px solid;
             background: #f8f9ff;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-        .critical { border-left-color: #e74c3c; }
-        .major { border-left-color: #f39c12; }
-        .minor { border-left-color: #3498db; }
-        .improvement { border-left-color: #27ae60; }
-        
+
+        .critical {
+            border-left-color: #e74c3c;
+        }
+
+        .major {
+            border-left-color: #f39c12;
+        }
+
+        .minor {
+            border-left-color: #3498db;
+        }
+
+        .improvement {
+            border-left-color: #27ae60;
+        }
+
         .issue-title {
             font-size: 1.4em;
             font-weight: bold;
@@ -60,20 +79,44 @@
             display: flex;
             align-items: center;
         }
-        .critical .issue-title { color: #e74c3c; }
-        .major .issue-title { color: #f39c12; }
-        .minor .issue-title { color: #3498db; }
-        .improvement .issue-title { color: #27ae60; }
-        
+
+        .critical .issue-title {
+            color: #e74c3c;
+        }
+
+        .major .issue-title {
+            color: #f39c12;
+        }
+
+        .minor .issue-title {
+            color: #3498db;
+        }
+
+        .improvement .issue-title {
+            color: #27ae60;
+        }
+
         .issue-title::before {
             margin-right: 10px;
             font-size: 1.5em;
         }
-        .critical .issue-title::before { content: "🔥"; }
-        .major .issue-title::before { content: "⚠️"; }
-        .minor .issue-title::before { content: "ℹ️"; }
-        .improvement .issue-title::before { content: "✨"; }
-        
+
+        .critical .issue-title::before {
+            content: "🔥";
+        }
+
+        .major .issue-title::before {
+            content: "⚠️";
+        }
+
+        .minor .issue-title::before {
+            content: "ℹ️";
+        }
+
+        .improvement .issue-title::before {
+            content: "✨";
+        }
+
         .problem {
             background: #ffebee;
             border: 1px solid #ef5350;
@@ -81,6 +124,7 @@
             border-radius: 8px;
             margin: 10px 0;
         }
+
         .solution {
             background: #e8f5e8;
             border: 1px solid #4caf50;
@@ -88,6 +132,7 @@
             border-radius: 8px;
             margin: 10px 0;
         }
+
         .component-table {
             width: 100%;
             border-collapse: collapse;
@@ -96,16 +141,20 @@
             border-radius: 8px;
             overflow: hidden;
         }
-        .component-table th, .component-table td {
+
+        .component-table th,
+        .component-table td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #e2e8f0;
             font-size: 0.9em;
         }
+
         .component-table th {
             background: #4a5568;
             color: white;
         }
+
         .priority-summary {
             background: linear-gradient(135deg, #ff6b6b, #ee5a52);
             color: white;
@@ -114,12 +163,14 @@
             margin: 30px 0;
             text-align: center;
         }
+
         .circuit-section {
             background: #f0f4f8;
             border-radius: 15px;
             padding: 25px;
             margin: 25px 0;
         }
+
         .code-block {
             background: #2d3748;
             color: #e2e8f0;
@@ -129,6 +180,7 @@
             overflow-x: auto;
             margin: 15px 0;
         }
+
         .recommendation {
             background: linear-gradient(135deg, #4ecdc4, #44a08d);
             color: white;
@@ -136,72 +188,111 @@
             border-radius: 10px;
             margin: 20px 0;
         }
+
         @media (max-width: 768px) {
             .issue-grid {
                 grid-template-columns: 1fr;
             }
+
             .component-table {
                 font-size: 0.8em;
             }
         }
 
-                .circuit-title {
+        .circuit-title {
             font-size: 1.8em;
             font-weight: bold;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
         }
-        .rfm-card .circuit-title { color: #e74c3c; }
-        .rtc-card .circuit-title { color: #3498db; }
-        
+
+        .rfm-card .circuit-title {
+            color: #e74c3c;
+        }
+
+        .rtc-card .circuit-title {
+            color: #3498db;
+        }
+
         .circuit-title::before {
             margin-right: 15px;
             font-size: 1.3em;
         }
-        .rfm-card .circuit-title::before { content: "📡"; }
-        .rtc-card .circuit-title::before { content: "⏰"; }
+
+        .rfm-card .circuit-title::before {
+            content: "📡";
+        }
+
+        .rtc-card .circuit-title::before {
+            content: "⏰";
+        }
 
 
-                .pin-table {
+        .pin-table {
             width: 100%;
             border-collapse: collapse;
             margin: 15px 0;
             font-size: 0.9em;
         }
-        .pin-table th, .pin-table td {
+
+        .pin-table th,
+        .pin-table td {
             padding: 8px 12px;
             text-align: left;
             border-bottom: 1px solid #e2e8f0;
         }
+
         .pin-table th {
             background: #4a5568;
             color: white;
         }
+
         .pin-table tr:hover {
             background: #f7fafc;
         }
 
-                .issue-section {
+        .issue-section {
             margin: 20px 0;
             padding: 15px;
             border-radius: 10px;
         }
-        .critical { background: #ffebee; border: 2px solid #e74c3c; }
-        .major { background: #fff8e1; border: 2px solid #f39c12; }
-        .minor { background: #e8f5e8; border: 2px solid #27ae60; }
-        
+
+        .critical {
+            background: #ffebee;
+            border: 2px solid #e74c3c;
+        }
+
+        .major {
+            background: #fff8e1;
+            border: 2px solid #f39c12;
+        }
+
+        .minor {
+            background: #e8f5e8;
+            border: 2px solid #27ae60;
+        }
+
         .issue-title {
             font-weight: bold;
             margin-bottom: 10px;
             font-size: 1.1em;
         }
-        .critical .issue-title { color: #e74c3c; }
-        .major .issue-title { color: #f39c12; }
-        .minor .issue-title { color: #27ae60; }
-        
+
+        .critical .issue-title {
+            color: #e74c3c;
+        }
+
+        .major .issue-title {
+            color: #f39c12;
+        }
+
+        .minor .issue-title {
+            color: #27ae60;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -210,95 +301,96 @@
         </div>
 
 
-                        <div class="circuit-card rfm-card">
-                    <div class="circuit-title">RFM69HW RF Transceiver</div>
-                    
-                    <div class="component-analysis">
-                        <h4>📋 Current Implementation Analysis</h4>
-                        <table class="pin-table">
-                            <thead>
-                                <tr>
-                                    <th>RFM69HW Pin</th>
-                                    <th>ESP32 Connection</th>
-                                    <th>Function</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>NSS (15)</td>
-                                    <td>IO2</td>
-                                    <td>SPI Chip Select</td>
-                                    <td>✅ Correct</td>
-                                </tr>
-                                <tr>
-                                    <td>MOSI (14)</td>
-                                    <td>MOSI</td>
-                                    <td>SPI Data In</td>
-                                    <td>✅ Correct</td>
-                                </tr>
-                                <tr>
-                                    <td>MISO (13)</td>
-                                    <td>MISO</td>
-                                    <td>SPI Data Out</td>
-                                    <td>✅ Correct</td>
-                                </tr>
-                                <tr>
-                                    <td>SCK (12)</td>
-                                    <td>CLK</td>
-                                    <td>SPI Clock</td>
-                                    <td>✅ Correct</td>
-                                </tr>
-                                <tr>
-                                    <td>RESET (1)</td>
-                                    <td>RST</td>
-                                    <td>Reset Control</td>
-                                    <td>❓ Not connected to ESP32</td>
-                                </tr>
-                                <tr>
-                                    <td>DIO0 (2)</td>
-                                    <td>DO0</td>
-                                    <td>Interrupt/Status</td>
-                                    <td>❓ Not connected to ESP32</td>
-                                </tr>
-                                <tr>
-                                    <td>ANT</td>
-                                    <td>IPEX connector</td>
-                                    <td>Antenna</td>
-                                    <td>No matching network</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div class="issue-section critical">
-                        <div class="issue-title">Critical Issues</div>
-                        <ul>
-                            <li><strong>Missing Reset Connection:</strong> RST pin not connected to ESP32 GPIO</li>
-                            <li><strong>Missing Interrupt:</strong> DIO0 pin not connected for status monitoring</li>
-                            <li><strong>No Antenna Matching:</strong> Direct connection without impedance matching</li>
-                            <li><strong>Power Supply Decoupling:</strong> Insufficient decoupling capacitors</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="issue-section major">
-                        <div class="issue-title">Major Issues</div>
-                        <ul>
-                            <li><strong>Antenna Design:</strong> No ground plane or antenna tuning shown</li>
-                            <li><strong>Crystal Loading:</strong> No load capacitors for 32MHz crystal</li>
-                            <li><strong>RF Filtering:</strong> Missing RF filtering on power lines</li>
-                            <li><strong>ESD Protection:</strong> No ESD protection on antenna line</li>
-                        </ul>
-                    </div>
-                </div>
-                
+        <div class="circuit-card rfm-card">
+            <div class="circuit-title">RFM69HW RF Transceiver</div>
+
+            <div class="component-analysis">
+                <h4>📋 Current Implementation Analysis</h4>
+                <table class="pin-table">
+                    <thead>
+                        <tr>
+                            <th>RFM69HW Pin</th>
+                            <th>ESP32 Connection</th>
+                            <th>Function</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>NSS (15)</td>
+                            <td>IO2</td>
+                            <td>SPI Chip Select</td>
+                            <td>✅ Correct</td>
+                        </tr>
+                        <tr>
+                            <td>MOSI (14)</td>
+                            <td>MOSI</td>
+                            <td>SPI Data In</td>
+                            <td>✅ Correct</td>
+                        </tr>
+                        <tr>
+                            <td>MISO (13)</td>
+                            <td>MISO</td>
+                            <td>SPI Data Out</td>
+                            <td>✅ Correct</td>
+                        </tr>
+                        <tr>
+                            <td>SCK (12)</td>
+                            <td>CLK</td>
+                            <td>SPI Clock</td>
+                            <td>✅ Correct</td>
+                        </tr>
+                        <tr>
+                            <td>RESET (1)</td>
+                            <td>RST</td>
+                            <td>Reset Control</td>
+                            <td>❓ Not connected to ESP32</td>
+                        </tr>
+                        <tr>
+                            <td>DIO0 (2)</td>
+                            <td>DO0</td>
+                            <td>Interrupt/Status</td>
+                            <td>❓ Not connected to ESP32</td>
+                        </tr>
+                        <tr>
+                            <td>ANT</td>
+                            <td>IPEX connector</td>
+                            <td>Antenna</td>
+                            <td>No matching network</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="issue-section critical">
+                <div class="issue-title">Critical Issues</div>
+                <ul>
+                    <li><strong>Missing Reset Connection:</strong> RST pin not connected to ESP32 GPIO</li>
+                    <li><strong>Missing Interrupt:</strong> DIO0 pin not connected for status monitoring</li>
+                    <li><strong>No Antenna Matching:</strong> Direct connection without impedance matching</li>
+                    <li><strong>Power Supply Decoupling:</strong> Insufficient decoupling capacitors</li>
+                </ul>
+            </div>
+
+            <div class="issue-section major">
+                <div class="issue-title">Major Issues</div>
+                <ul>
+                    <li><strong>Antenna Design:</strong> No ground plane or antenna tuning shown</li>
+                    <li><strong>Crystal Loading:</strong> No load capacitors for 32MHz crystal</li>
+                    <li><strong>RF Filtering:</strong> Missing RF filtering on power lines</li>
+                    <li><strong>ESD Protection:</strong> No ESD protection on antenna line</li>
+                </ul>
+            </div>
+        </div>
 
 
-        
+
+
         <div class="content">
             <div class="priority-summary">
                 <h2>🚨 Critical Issues Found: 8 Major Problems</h2>
-                <p>This circuit has multiple safety and functionality issues that must be addressed before implementation</p>
+                <p>This circuit has multiple safety and functionality issues that must be addressed before
+                    implementation</p>
             </div>
 
             <div class="issue-grid">
@@ -468,18 +560,20 @@
 
             <div class="circuit-section">
                 <h2>🔧 Priority Improvement Plan</h2>
-                
+
                 <div class="recommendation">
                     <h3>Phase 1: Critical Safety Issues (MUST FIX)</h3>
                     <ol>
-                        <li><strong>Fix Voltage Measurement:</strong> Implement proper voltage divider with surge protection</li>
+                        <li><strong>Fix Voltage Measurement:</strong> Implement proper voltage divider with surge
+                            protection</li>
                         <li><strong>Add AC Input Protection:</strong> MOV surge suppressors and input filtering</li>
                         <li><strong>Implement Safety Isolation:</strong> Proper creepage distances and barriers</li>
                         <li><strong>Add Relay Protection:</strong> Flyback diodes and contact snubbers</li>
                     </ol>
                 </div>
 
-                <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <div
+                    style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 20px; border-radius: 10px; margin: 20px 0;">
                     <h3>Phase 2: Performance Improvements</h3>
                     <ol>
                         <li><strong>Optimize Current Sensing:</strong> Proper CT specifications and grounding</li>
@@ -550,7 +644,8 @@
 
             <div class="priority-summary">
                 <h2>⚡ Implementation Impact</h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
                     <div>
                         <h3>Current State</h3>
                         <p>❌ Non-functional<br>❌ Safety hazard<br>❌ Will destroy components</p>
@@ -566,19 +661,32 @@
                 </div>
             </div>
 
-            <div style="background: #fee; border: 2px solid #e53e3e; border-radius: 10px; padding: 20px; margin: 20px 0;">
+            <div
+                style="background: #fee; border: 2px solid #e53e3e; border-radius: 10px; padding: 20px; margin: 20px 0;">
                 <h3 style="color: #e53e3e; margin-top: 0;">🚨 Safety Warning</h3>
                 <p><strong>DO NOT BUILD THIS CIRCUIT AS CURRENTLY DESIGNED!</strong></p>
                 <p>The current design has multiple safety violations and will result in:</p>
                 <ul>
                     <li>Immediate destruction of the ADE7953 chip</li>
                     <li>Potential fire hazard from improper AC handling</li>
-                    <li>Safety standard violations (<a href="https://www.iecee.org/certification/iec-standards/iec-61010-1-2010">IEC 61010-1</a>)</li>
+                    <li>Safety standard violations (<a
+                            href="https://www.iecee.org/certification/iec-standards/iec-61010-1-2010">IEC 61010-1</a>)
+                    </li>
                     <li>Regulatory compliance failures</li>
                 </ul>
-                <p><strong>All critical issues must be addressed before any testing or implementation.</strong></p>
+                <p>
+                    <strong>
+                        All critical issues must be resolved prior to any testing or implementation.
+                        For details, refer to the
+                        <a href="https://sagieramos.github.io/xense_report/circuit_cal" target="_blank"
+                            rel="noopener noreferrer">
+                            Circuit Calibration Report
+                        </a>.
+                    </strong>
+                </p>
             </div>
         </div>
     </div>
 </body>
+
 </html>

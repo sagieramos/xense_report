@@ -1,4 +1,4 @@
-# ADE7953 Voltage Measurement Circuit - Detailed Design Calculations
+# A**DE7953** Voltage Measurement Circuit - Detailed Design Calculations
 
 ## Problem Analysis: Original Circuit Issues
 
