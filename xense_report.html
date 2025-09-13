@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Circuit Analysis & Improvements</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #e74c3c);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .content {
+            padding: 30px;
+        }
+        .issue-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        .issue-card {
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid;
+            background: #f8f9ff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .critical { border-left-color: #e74c3c; }
+        .major { border-left-color: #f39c12; }
+        .minor { border-left-color: #3498db; }
+        .improvement { border-left-color: #27ae60; }
+        
+        .issue-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .critical .issue-title { color: #e74c3c; }
+        .major .issue-title { color: #f39c12; }
+        .minor .issue-title { color: #3498db; }
+        .improvement .issue-title { color: #27ae60; }
+        
+        .issue-title::before {
+            margin-right: 10px;
+            font-size: 1.5em;
+        }
+        .critical .issue-title::before { content: "🔥"; }
+        .major .issue-title::before { content: "⚠️"; }
+        .minor .issue-title::before { content: "ℹ️"; }
+        .improvement .issue-title::before { content: "✨"; }
+        
+        .problem {
+            background: #ffebee;
+            border: 1px solid #ef5350;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .solution {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .component-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .component-table th, .component-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.9em;
+        }
+        .component-table th {
+            background: #4a5568;
+            color: white;
+        }
+        .priority-summary {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        .circuit-section {
+            background: #f0f4f8;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .recommendation {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        @media (max-width: 768px) {
+            .issue-grid {
+                grid-template-columns: 1fr;
+            }
+            .component-table {
+                font-size: 0.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 Complete XENSE Smart Socket Circuit Analysis</h1>
+            <p>Comprehensive Review & Improvement Recommendations</p>
+        </div>
+        
+        <div class="content">
+            <div class="priority-summary">
+                <h2>🚨 Critical Issues Found: 8 Major Problems</h2>
+                <p>This circuit has multiple safety and functionality issues that must be addressed before implementation</p>
+            </div>
+
+            <div class="issue-grid">
+                <!-- Issue 1: Voltage Measurement -->
+                <div class="issue-card critical">
+                    <div class="issue-title">Voltage Measurement Circuit</div>
+                    <div class="problem">
+                        <strong>Problem:</strong> Direct 220V connection to ADE7953 VP/VN pins (max ±0.5V)
+                        <br><strong>Risk:</strong> Immediate chip destruction
+                    </div>
+                    <div class="solution">
+                        <strong>Solution:</strong> Implement proper voltage divider (622:1 ratio)
+                        <br><strong>Components:</strong> 2.2MΩ/3.6kΩ precision resistors + TVS protection
+                    </div>
+                </div>
+
+                <!-- Issue 2: Current Sensing -->
+                <div class="issue-card major">
+                    <div class="issue-title">Current Sensing Issues</div>
+                    <div class="problem">
+                        <strong>Problems:</strong>
+                        <ul>
+                            <li>20Ω burden resistors may be undersized for power rating</li>
+                            <li>No current transformer specifications given</li>
+                            <li>Improper grounding of current sensing circuit</li>
+                        </ul>
+                    </div>
+                    <div class="solution">
+                        <strong>Solutions:</strong>
+                        <ul>
+                            <li>Use 1/4W rated burden resistors minimum</li>
+                            <li>Specify CT ratio (recommend 1000:1 for 25A max)</li>
+                            <li>Implement proper AGND star grounding</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Issue 3: Power Supply -->
+                <div class="issue-card major">
+                    <div class="issue-title">Power Supply Design</div>
+                    <div class="problem">
+                        <strong>Problems:</strong>
+                        <ul>
+                            <li>HLK10M03: Current capacity not verified</li>
+                            <li>No input filtering on AC side</li>
+                            <li>Insufficient output decoupling</li>
+                            <li>No inrush current limiting</li>
+                        </ul>
+                    </div>
+                    <div class="solution">
+                        <strong>Improvements:</strong>
+                        <ul>
+                            <li>Add AC input filter (L-C-L configuration)</li>
+                            <li>Include NTC thermistor for inrush limiting</li>
+                            <li>Add more output capacitors for ripple reduction</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Issue 4: Safety & Isolation -->
+                <div class="issue-card critical">
+                    <div class="issue-title">Safety & Isolation</div>
+                    <div class="problem">
+                        <strong>Critical Issues:</strong>
+                        <ul>
+                            <li>Inadequate creepage distances on PCB</li>
+                            <li>No safety barriers between HV and LV</li>
+                            <li>Missing surge protection on AC input</li>
+                            <li>No earth ground connection shown</li>
+                        </ul>
+                    </div>
+                    <div class="solution">
+                        <strong>Essential Fixes:</strong>
+                        <ul>
+                            <li>Minimum 8mm creepage for 250V rating</li>
+                            <li>Add MOV surge suppressors</li>
+                            <li>Implement proper earth grounding</li>
+                            <li>Add reinforced insulation barriers</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Issue 5: RF Circuit -->
+                <div class="issue-card minor">
+                    <div class="issue-title">RF Wireless Circuit</div>
+                    <div class="problem">
+                        <strong>Problems:</strong>
+                        <ul>
+                            <li>Antenna impedance matching not optimized</li>
+                            <li>No RF shielding considerations</li>
+                            <li>Potential interference from switching circuits</li>
+                        </ul>
+                    </div>
+                    <div class="solution">
+                        <strong>Improvements:</strong>
+                        <ul>
+                            <li>Add π-network impedance matching</li>
+                            <li>Implement proper ground planes</li>
+                            <li>Add ferrite beads on digital lines</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Issue 6: Relay Control -->
+                <div class="issue-card major">
+                    <div class="issue-title">Relay Control Circuit</div>
+                    <div class="problem">
+                        <strong>Problems:</strong>
+                        <ul>
+                            <li>No flyback diode on relay coil</li>
+                            <li>Transistor base current limiting inadequate</li>
+                            <li>No relay contact protection</li>
+                        </ul>
+                    </div>
+                    <div class="solution">
+                        <strong>Essential Additions:</strong>
+                        <ul>
+                            <li>Add 1N4007 flyback diode across relay coil</li>
+                            <li>Proper base resistor calculation (470Ω recommended)</li>
+                            <li>RC snubber across relay contacts</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Issue 7: Grounding -->
+                <div class="issue-card major">
+                    <div class="issue-title">Grounding Architecture</div>
+                    <div class="problem">
+                        <strong>Problems:</strong>
+                        <ul>
+                            <li>Multiple ground symbols without clear hierarchy</li>
+                            <li>Analog and digital grounds not separated</li>
+                            <li>Ground loops potential</li>
+                        </ul>
+                    </div>
+                    <div class="solution">
+                        <strong>Proper Grounding:</strong>
+                        <ul>
+                            <li>Implement star grounding at power supply</li>
+                            <li>Separate AGND and DGND planes</li>
+                            <li>Single point connection between ground planes</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Issue 8: Component Ratings -->
+                <div class="issue-card minor">
+                    <div class="issue-title">Component Specifications</div>
+                    <div class="problem">
+                        <strong>Missing Specifications:</strong>
+                        <ul>
+                            <li>Capacitor voltage ratings not shown</li>
+                            <li>Resistor power ratings unclear</li>
+                            <li>Component tolerances not specified</li>
+                        </ul>
+                    </div>
+                    <div class="solution">
+                        <strong>Required Specifications:</strong>
+                        <ul>
+                            <li>All capacitors: voltage rating ≥ 1.5x operating</li>
+                            <li>Power resistors: ≥2x calculated dissipation</li>
+                            <li>Precision components: ±1% or better</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="circuit-section">
+                <h2>🔧 Priority Improvement Plan</h2>
+                
+                <div class="recommendation">
+                    <h3>Phase 1: Critical Safety Issues (MUST FIX)</h3>
+                    <ol>
+                        <li><strong>Fix Voltage Measurement:</strong> Implement proper voltage divider with surge protection</li>
+                        <li><strong>Add AC Input Protection:</strong> MOV surge suppressors and input filtering</li>
+                        <li><strong>Implement Safety Isolation:</strong> Proper creepage distances and barriers</li>
+                        <li><strong>Add Relay Protection:</strong> Flyback diodes and contact snubbers</li>
+                    </ol>
+                </div>
+
+                <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <h3>Phase 2: Performance Improvements</h3>
+                    <ol>
+                        <li><strong>Optimize Current Sensing:</strong> Proper CT specifications and grounding</li>
+                        <li><strong>Improve Power Supply:</strong> Better filtering and regulation</li>
+                        <li><strong>Enhance RF Performance:</strong> Impedance matching and shielding</li>
+                        <li><strong>Refine Grounding:</strong> Implement proper grounding architecture</li>
+                    </ol>
+                </div>
+
+                <div style="background: #d1ecf1; border: 1px solid #bee5eb; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <h3>Phase 3: Design Optimization</h3>
+                    <ol>
+                        <li><strong>Component Selection:</strong> Specify all ratings and tolerances</li>
+                        <li><strong>PCB Layout:</strong> Optimize for EMI and thermal performance</li>
+                        <li><strong>Testing Protocol:</strong> Develop comprehensive test procedures</li>
+                        <li><strong>Certification:</strong> Ensure compliance with safety standards</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="circuit-section">
+                <h2>📋 Essential Components to Add</h2>
+                <table class="component-table">
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Function</th>
+                            <th>Specification</th>
+                            <th>Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>MOV1, MOV2</td>
+                            <td>AC surge protection</td>
+                            <td>275V, 14mm diameter</td>
+                            <td>Critical</td>
+                        </tr>
+                        <tr>
+                            <td>D4 (flyback)</td>
+                            <td>Relay protection</td>
+                            <td>1N4007, 1A, 1000V</td>
+                            <td>Critical</td>
+                        </tr>
+                        <tr>
+                            <td>TVS voltage protection</td>
+                            <td>Voltage divider protection</td>
+                            <td>SMBJ275A</td>
+                            <td>Critical</td>
+                        </tr>
+                        <tr>
+                            <td>L1, L2 (input filter)</td>
+                            <td>EMI suppression</td>
+                            <td>1mH, 5A common mode choke</td>
+                            <td>Major</td>
+                        </tr>
+                        <tr>
+                            <td>NTC thermistor</td>
+                            <td>Inrush current limiting</td>
+                            <td>10Ω, 5A, 10mm</td>
+                            <td>Major</td>
+                        </tr>
+                        <tr>
+                            <td>C_snubber</td>
+                            <td>Relay contact protection</td>
+                            <td>100nF/630V + 47Ω</td>
+                            <td>Major</td>
+                        </tr>
+                        <tr>
+                            <td>Ferrite beads</td>
+                            <td>RF interference suppression</td>
+                            <td>FB BLM18PG221SN1D</td>
+                            <td>Minor</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="priority-summary">
+                <h2>⚡ Implementation Impact</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
+                    <div>
+                        <h3>Current State</h3>
+                        <p>❌ Non-functional<br>❌ Safety hazard<br>❌ Will destroy components</p>
+                    </div>
+                    <div>
+                        <h3>After Phase 1 Fixes</h3>
+                        <p>✅ Basic functionality<br>✅ Safe operation<br>✅ Component protection</p>
+                    </div>
+                    <div>
+                        <h3>After All Improvements</h3>
+                        <p>✅ Professional grade<br>✅ High accuracy<br>✅ Commercial ready</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="background: #fee; border: 2px solid #e53e3e; border-radius: 10px; padding: 20px; margin: 20px 0;">
+                <h3 style="color: #e53e3e; margin-top: 0;">🚨 Safety Warning</h3>
+                <p><strong>DO NOT BUILD THIS CIRCUIT AS CURRENTLY DESIGNED!</strong></p>
+                <p>The current design has multiple safety violations and will result in:</p>
+                <ul>
+                    <li>Immediate destruction of the ADE7953 chip</li>
+                    <li>Potential fire hazard from improper AC handling</li>
+                    <li>Safety standard violations (IEC 61010-1)</li>
+                    <li>Regulatory compliance failures</li>
+                </ul>
+                <p><strong>All critical issues must be addressed before any testing or implementation.</strong></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
